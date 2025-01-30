@@ -1,13 +1,14 @@
 import RestaurantCard from "./RestaurantCard";
-import { useEffect, useState } from "react";
+import {useState, useEffect } from "react";
 import { SWIGGY_URL } from "../utils/constants";
 import Shimmer from "./shimmer";
+import resList from "../utils/mockData";
 
 const Body=() => {
-   const  [listofRestaurents,setListofRestaurents] =useState([]);
-   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-
+  const [listofRestaurents, setListofRestaurents] = useState([]);
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);  
    const [searchText,setSearchText]= useState("");
+
 console.log("body rendered")
 
    useEffect(()=>{
@@ -15,13 +16,24 @@ console.log("body rendered")
    },[]);
 
    const fetchData = async () => {
-    const data = await fetch(SWIGGY_URL);
+    try {
+        const response = await fetch(SWIGGY_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const json = await response.json();
+      
 
-    const json = await data.json();
+      const restaurantData = json?.data?.cards?.[2]?.gridElements?.infoWithStyle?.restaurants || resList;
+      setListofRestaurents(restaurantData);
+      setFilteredRestaurant(restaurantData);
+  } catch (error) {
+      console.error("Error fetching data, using mock data:", error);
+      setListofRestaurents(resList);
+      setFilteredRestaurant(resList);
+  }
+};
 
-    setListofRestaurents(json?.data?.cards[2]?.data?.data?.cards);
-    setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
-  };
    
   // conditional rendering
  
@@ -60,7 +72,7 @@ console.log("body rendered")
     //         },
     //     },
     // ];
-    return listofRestaurents.length === 0 ?( 
+    return !Array.isArray(listofRestaurents) || listofRestaurents.length === 0 ? ( 
     <Shimmer/>
   ) :(
         <div className="body">

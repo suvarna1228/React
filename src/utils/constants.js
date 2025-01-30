@@ -2,4 +2,4 @@
 
 export const LOGO_URL = "https://www.logodesign.net/logo/smoking-burger-with-lettuce-3624ld.png";
 
-export const SWIGGY_URL=  "https://thingproxy.freeboard.io/fetch/https://www.swiggy.com/dapi/restaurants/list/v5?lat=18.5869658&lng=73.8264677&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
+export const SWIGGY_URL = "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=10.9654015&lng=76.227993&carousel=true&third_party_vendor=1";
