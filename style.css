@@ -22,8 +22,14 @@
   .nav-items > ul > li {
     padding: 10px;
     margin: 10px;
+    
   }
-  .nav-items > ul > li:hover {
+  .nav-items > ul > li > a{
+    text-decoration: none;
+    color: black;
+  }
+  
+  .nav-items > ul > li:hover ,.nav-items > ul > li > a:hover {
   color: brown;
   cursor: pointer;
 
