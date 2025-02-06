@@ -1,9 +1,12 @@
 import RestaurantCard from "./RestaurantCard";
 import {useState, useEffect } from "react";
-import { SWIGGY_URL } from "../utils/constants";
+import { SWIGGY_URL } from "../utils/Constants";
 import Shimmer from "./shimmer";
 import resList from "../utils/mockData";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import useOnlineStatus from "../utils/useOnlineStatus";
+
 
 const Body=() => {
   const [listofRestaurents, setListofRestaurents] = useState([]);
@@ -19,21 +22,29 @@ console.log("body rendered")
    const fetchData = async () => {
     try {
         const response = await fetch(SWIGGY_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
-      const json = await response.json();
-      
+        const json = await response.json();
+        console.log(json);  // This will help you inspect the structure
 
-      const restaurantData = json?.data?.cards?.[2]?.gridElements?.infoWithStyle?.restaurants || resList;
-      setListofRestaurents(restaurantData);
-      setFilteredRestaurant(restaurantData);
-  } catch (error) {
-      console.error("Error fetching data, using mock data:", error);
-      setListofRestaurents(resList);
-      setFilteredRestaurant(resList);
-  }
+        const restaurantData = json?.data?.cards?.[2]?.gridElements?.infoWithStyle?.restaurants || resList;
+        setListofRestaurents(restaurantData);
+        setFilteredRestaurant(restaurantData);
+    } catch (error) {
+        console.error("Error fetching data, using mock data:", error);
+        setListofRestaurents(resList);
+        setFilteredRestaurant(resList);
+    }
 };
+
+   const onlineStatus = useOnlineStatus();
+
+   if(onlineStatus === false){
+    return(
+      <h1>
+        no oo internet
+      </h1>
+      )
+   }
+
 
    
   // conditional rendering
@@ -118,7 +129,7 @@ console.log("body rendered")
                  {filteredRestaurant.map((restaurant) => (
                    <Link
                    key={restaurant.info.id}
-                   to={"/restaurants" + restaurant.info.id}>
+                   to={"/restaurants/" + restaurant.info.id}>
                     <RestaurantCard  resData={restaurant}/>
                    </Link>
                    
