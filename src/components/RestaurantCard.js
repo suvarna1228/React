@@ -12,9 +12,20 @@ const RestaurantCard = (props) => {
         <h4>${costForTwo}</h4>
         <h4>{sla?.slaString}</h4>
     </div>
-
    ); 
 };
+
+export const withPromotedLabel =(RestaurantCard) =>{
+  return(props) => {
+    return (
+        <div>
+          <label className="promo">Promoted</label>
+          <RestaurantCard {...props}/>
+        </div>
+    );
+  };
+};
+
 
 
 export default RestaurantCard;

@@ -1,19 +1,21 @@
-import RestaurantCard from "./RestaurantCard";
-import {useState, useEffect } from "react";
+import RestaurantCard,{withPromotedLabel} from "./RestaurantCard";
+import {useState, useEffect, useContext } from "react";
 import { SWIGGY_URL } from "../utils/Constants";
 import Shimmer from "./shimmer";
 import resList from "../utils/mockData";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
-import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+
+
 
 
 const Body=() => {
   const [listofRestaurents, setListofRestaurents] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);  
-   const [searchText,setSearchText]= useState("");
+  const [searchText,setSearchText]= useState("");
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
-console.log("body rendered")
 
    useEffect(()=>{
     fetchData();
@@ -44,7 +46,7 @@ console.log("body rendered")
       </h1>
       )
    }
-
+  const {loggedInUser,setUserName}=useContext(UserContext);
 
    
   // conditional rendering
@@ -123,14 +125,26 @@ console.log("body rendered")
                 }}>
                      Top Rated Restaurants
                 </button>
+                <div className="search m-4 p-4 fles item-center">
+                   <label>User:</label>
+                   <input className="border border-black p-2"
+                   value={loggedInUser}
+                   onChange={(e)=>setUserName(e.target.value)}>
+                   </input>
+                </div>
             </div>
 
                 <div className="res-container">
                  {filteredRestaurant.map((restaurant) => (
                    <Link
                    key={restaurant.info.id}
-                   to={"/restaurants/" + restaurant.info.id}>
-                    <RestaurantCard  resData={restaurant}/>
+                   to={"/restaurants/" + restaurant.info?.id}>
+
+                    {restaurant.info.promoted? (
+                      <RestaurantCardPromoted resData={restaurant} />) :(
+                        <RestaurantCard  resData={restaurant}/>
+                      )}
+                    
                    </Link>
                    
                  ))}
