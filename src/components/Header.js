@@ -3,6 +3,7 @@ import {LOGO_URL} from "../utils/Constants";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
     const [btn,setBtn] = useState("Login");
@@ -13,6 +14,11 @@ const {loggedInUser} =useContext(UserContext)
     useEffect(()=>{
         console.log("useeffect called");
     },[btn]);
+
+// subscribing
+    const cartItems = useSelector((store) => store.cart.items);
+    console.log(cartItems);
+
     return(
         <div className="header">
             <div className="logo-container">
@@ -35,10 +41,10 @@ const {loggedInUser} =useContext(UserContext)
                     <li>
                        <Link to="/grocery">Grocery</Link>
                     </li>
-                    <li>
-                        Cart
+                    <li className="font-bold text-lg">
+                        <Link to="/cart">Cart-({cartItems.length}items)</Link>
                     </li>
-                    <button className="login"
+                    <button className="login border bg-black  m-2 text-white  border-black "
                     onClick={()=>{
                         setBtn(btn === "Login" ? "Logout" : "Login");
                     }}>

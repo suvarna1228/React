@@ -8,7 +8,7 @@ const RestaurantCard = (props) => {
         <img className="res-logo" alt="res-logo" src={CDN_URL+cloudinaryImageId}/> 
         <h3>{name}</h3>
         <h4>{cuisines.join(",")}</h4>
-        <h4>{avgRating}</h4>
+        <h4>{avgRating}⭐</h4>
         <h4>${costForTwo}</h4>
         <h4>{sla?.slaString}</h4>
     </div>
@@ -18,8 +18,8 @@ const RestaurantCard = (props) => {
 export const withPromotedLabel =(RestaurantCard) =>{
   return(props) => {
     return (
-        <div>
-          <label className="promo">Promoted</label>
+        <div className="relative">
+          <label className="promo absolute top-0 left-0 bg-red-500 text-white px-2 py-1 rounded">Promoted</label>
           <RestaurantCard {...props}/>
         </div>
     );

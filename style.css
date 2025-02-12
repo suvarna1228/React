@@ -1,4 +1,6 @@
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .header {
     display: flex;
@@ -70,6 +72,7 @@
   }
   .search{
     padding: 10px;
+    border-radius: 5px;
   }
   .filter-btn{
    margin: 10px;
@@ -93,8 +96,11 @@
     
   }
   .login{
-    padding: 020px;
+    padding: 10px;
+    border-radius: 5px;
+    align-items: center;
     cursor: pointer;
+    
   }
   .filter{
     display: flex;

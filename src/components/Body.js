@@ -90,17 +90,18 @@ const Body=() => {
     <Shimmer/>
   ) :(
         <div className="body">
-            <div className="filter">
-              <div className="search">
+            <div className="filter items-center ">
+              <div className="search flex gap-4 justify-center items-center">
                 <input 
                 type="text" 
-                className="search-box" 
+                className="search-box border rounded-md border-black  h-6 " 
                 value={searchText} 
                 onChange={(e)=>{
                   setSearchText(e.target.value);
                 }}/>
                 
                 <button
+                  className="border rounded-lg border-black p-2 h-10 bg-black text-white"
                    onClick={()=>{
                     console.log(searchText);
 
@@ -116,7 +117,7 @@ const Body=() => {
               </div>
 
 
-                <button className="filter-btn"
+                <button className="filter-btn border border-black p-2 w-15 h-10 "
                  onClick={()=>{
                     const filterdList = listofRestaurents.filter(
                       (res)=>res.info.avgRating>4.1
@@ -125,9 +126,9 @@ const Body=() => {
                 }}>
                      Top Rated Restaurants
                 </button>
-                <div className="search m-4 p-4 fles item-center">
-                   <label>User:</label>
-                   <input className="border border-black p-2"
+                <div className="search m-3 p-3 fles item-center ">
+                   <label className="font-bold  mr-1">User:</label>
+                   <input className="border border-black lg:p-3 p-1 rounded-lg"
                    value={loggedInUser}
                    onChange={(e)=>setUserName(e.target.value)}>
                    </input>

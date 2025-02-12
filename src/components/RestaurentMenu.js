@@ -1,49 +1,55 @@
-
 import Shimmer from './shimmer';
 import { useParams } from 'react-router-dom';
 import useRestaurantMenu from '../utils/useRestaurantMenu';
 import RestaurantCategory from './RestaurantCategory';
 import { useState } from 'react';
+import { MENU_URL } from '../utils/Constants';
 
-const RestaurentMenu = () => {
-    
-    const { resId }= useParams();
+const RestaurantMenu = () => {
+    const { resId } = useParams();
+    const apiUrl = MENU_URL + resId + "&catalog_qa=undefined";
+    const resInfo = useRestaurantMenu(apiUrl);
 
-    const resInfo = useRestaurantMenu(resId);
+    const [showIndex, setShowIndex] = useState(0);
 
-   const [showIndex,setShowIndex] = useState();
-    
-    if (resInfo === null) return  <Shimmer/>;
+    // Show loading shimmer if data is not yet available
+    if (!resInfo) return <Shimmer />;
 
-   const {name,cuisines,costForTwoMessage } =
-   resInfo?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants?.info || {};
+    // Extract restaurant details
+    const { name, cuisines, costForTwoMessage } =
+        resInfo?.cards?.find((c) => c?.card?.card?.info)?.card?.card?.info || {};
 
-   const {itemCards}=
-   resInfo?.data?.cards[7].groupedCard?.cardGroupMap?.REGULAR?.
-   cards?.[2]?.card?.card?.itemCards || [];
+    const cuisinesText = Array.isArray(cuisines) ? cuisines.join(", ") : "No cuisines available";
 
-    console.log(itemCards);
+    // Extract categories (menu sections)
+    const categories =
+        resInfo?.cards?.find((c) => c?.groupedCard?.cardGroupMap?.REGULAR)?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter(
+            (c) => c?.card?.card?.["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+        ) || [];
 
-    const categories = resInfo?.data?.cards[7].groupedCard?.cardGroupMap?.REGULAR?.
-    cards?.[2]?.card?.card?.itemCards.filter((c)=>
-        c.card?.["card"]?.["@type"] === 
-    "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
-);
+    console.log("Categories:", categories);
 
-  return(
-    <div className="text-center">
-        <h1 className='font-bold my-5 text-2xl'>{ name}</h1>
-        <p className='font-bold text-lg'>{cuisines.join(",")}- {costForTwoMessage}</p>
+    return (
+        <div className="text-center">
+            <h1 className='font-bold my-5 text-2xl'>{name}</h1>
+            <p className='font-bold text-lg'>
+                {cuisinesText} - {costForTwoMessage}
+            </p>
 
-    {cuisines.map((category) => (
-        <RestaurantCategory 
-        key={category?.card?.card?.tittle} 
-        data={category?.card?.card}
-        setShowIndex={()=>setShowIndex(index)}
-        />
-  ))}
-    </div>
-  );
+            {categories.length > 0 ? (
+                categories.map((category, index) => (
+                    <RestaurantCategory
+                        key={category?.card?.card?.title}
+                        data={category?.card?.card}
+                        showItems={index ===1? true:false }
+                        setShowIndex={() => setShowIndex(index === showIndex ? null : index)}
+                    />
+                ))
+            ) : (
+                <p>No menu items available.</p>
+            )}
+        </div>
+    );
 };
 
-export default RestaurentMenu;
+export default RestaurantMenu;

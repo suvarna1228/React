@@ -1,35 +1,22 @@
 import { useEffect, useState } from "react";
-import { MENU_URL } from "./Constants";
-import resMenu from "./MockMenu";
 
-const useRestaurantMenu = (resId) =>{
-    const [resInfo,setResInfo] = useState(null);
+const useRestaurantMenu = (apiUrl) => {
+    const [resInfo, setResInfo] = useState(null);
 
-    useEffect(()=>{
-        fetchData();
-    },[]);
+    useEffect(() => {
+        if (!apiUrl) return;
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(MENU_URL + resId);
-            if (!response.ok) {
-                throw new Error("API request failed");
-            }
-
+        const fetchMenu = async () => {
+            const response = await fetch(apiUrl);
             const json = await response.json();
-            
+            console.log("Menu Data:", json?.data);
+            setResInfo(json?.data);
+        };
 
-            const menuData =
-                json?.data?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.itemCards ||
-                resMenu;
+        fetchMenu();
+    }, [apiUrl]); 
 
-            setResInfo(menuData);
-        } catch (error) {
-            console.error("Error fetching data, using mock data:", error);
-            setResInfo(resMenu);
-
-        }
-    };
     return resInfo;
 };
+
 export default useRestaurantMenu;
