@@ -7,25 +7,25 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
     const [btn,setBtn] = useState("Login");
-    console.log("Header render");
+    
  const onlineStatus = useOnlineStatus();
 const {loggedInUser} =useContext(UserContext)
 
     useEffect(()=>{
-        console.log("useeffect called");
+       
     },[btn]);
 
 // subscribing
     const cartItems = useSelector((store) => store.cart.items);
-    console.log(cartItems);
+    
 
     return(
-        <div className="header">
+        <div className="header m-2">
             <div className="logo-container">
                 <img className="logo" src = {LOGO_URL}/>
             </div>
             <div className="nav-items">
-                <ul>
+                <ul className="font-semibold">
                     <li>
                        Online Status:{onlineStatus ? "🟢":"🔴"}
                     </li>
